@@ -7,35 +7,64 @@ package appointmentscheduler.data;
 
 import appointmentscheduler.logic.Authentication;
 import appointmentscheduler.view.AlertBox;
-import appointmentscheduler.view.AppointmentScheduler;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author marro
  */
 public class DBConnection {
-    //52.206.157.109/ -- Old server name
-    private static Connection conn;
-    private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB = "U04NEQ";
-    private static final String URL = "jdbc:mysql://3.227.166.251/" + DB;
-    private static final String USER = DB;
-    private static final String PASS = "53688288426";
     
+    private static Connection conn;
+    private static String DRIVER;
+    private static String DB;
+    private static String URL;
+    private static String USER;
+    private static String PASS;
+        
     private DBConnection(){};
     
     // Method to get connection 
     public static Connection getConnection(){
+        /*
+            Load DB properties from config file
+        */
+        Properties props = new Properties(); 
+        FileInputStream in;
+        
+        try {
+            in = new FileInputStream("dbconf.config");
+            try {
+                props.load(in);
+                in.close();
+                // set our variables
+                URL = props.getProperty("dburl");
+                USER = props.getProperty("dbuser");
+                PASS = props.getProperty("dbpass");
+                DB = props.getProperty("dbname");
+                DRIVER = props.getProperty("dbdriver");
+
+            } catch (IOException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         try{
             Class.forName(DRIVER);
             try{
-                conn = DriverManager.getConnection(URL,USER,PASS);
+                conn = DriverManager.getConnection(URL+DB,USER,PASS);
             }catch (SQLException ex){
                 AlertBox.display("Database Error", "Cannot establish connection to database. Check your connection and try again.");
                 System.out.println("Cannot obtain connection to Database");

@@ -11,7 +11,7 @@ package appointmentscheduler.logic;
  */
 public class Queries {
     // Report 1 @params month, date
-    public static final String APPTYPES_BY_MONTH = "SELECT YEAR(start) AS year,MONTH(start) AS month,type,COUNT(type) AS number FROM appointment GROUP BY type HAVING month=? AND year=?;";
+    public static final String APPTYPES_BY_MONTH = "SELECT YEAR(start) AS year,MONTH(start) AS month,type,COUNT(type) AS number FROM appointment GROUP BY type,start HAVING month=? AND year=?;";
     // Report 2 @params userId
     public static final String APPTS_BY_CONSULTANT = "SELECT c.customerName,a.userId,a.type,a.description,a.location,date(a.start) AS meetingDate,time(a.start) AS startTime,time(a.end) AS endTime,\n" +
                                                             "c.customerID,c.address AS address1,c.address2,c.city,c.country,c.postalCode,c.phone FROM appointment a\n" +
