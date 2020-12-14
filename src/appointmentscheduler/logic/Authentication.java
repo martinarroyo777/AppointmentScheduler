@@ -70,7 +70,7 @@ public final class Authentication {
             logMessage.append("Database connection error:\n");
             logMessage.append(Arrays.toString(e.getStackTrace()));
             try{
-                writeToLog(logMessage.toString());
+                writeToLog(logMessage.toString() + "-- It appears that the database configuration file is missing. You can add one to the project root directory to connect to the database.");
             } catch(IOException ex){
                 System.out.println(ex);
             }

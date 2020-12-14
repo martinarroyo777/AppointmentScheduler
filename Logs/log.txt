@@ -469,3 +469,7 @@ Error obtaining database connection:
 2020-12-11T16:45:48.880:	 Log-in from test
 2020-12-11T16:53:12.887:	 Log-in from test
 2020-12-11T16:56:52.301:	 Log-in from test
+java.io.FileNotFoundException: dbconf.config (No such file or directory)
+java.io.FileNotFoundException: dbconf.config (No such file or directory)
+java.io.FileNotFoundException: dbconf.config (No such file or directory)
+java.lang.NullPointerException--It appears that the database configuration file is missing. You can add one to the project root file to connect to the database.

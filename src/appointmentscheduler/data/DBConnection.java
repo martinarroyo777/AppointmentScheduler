@@ -6,6 +6,7 @@
 package appointmentscheduler.data;
 
 import appointmentscheduler.logic.Authentication;
+import appointmentscheduler.logic.LogWriter;
 import appointmentscheduler.view.AlertBox;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,7 +36,7 @@ public class DBConnection {
     private DBConnection(){};
     
     // Method to get connection 
-    public static Connection getConnection(){
+    public static Connection getConnection() {
         /*
             Load DB properties from config file
         */
@@ -59,6 +60,12 @@ public class DBConnection {
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+
+            try{
+                LogWriter.writeToLog(ex.toString());
+            } catch(IOException e){
+                System.out.println(e.toString());
+            }
         }
         
         try{
@@ -82,7 +89,15 @@ public class DBConnection {
             } 
         } catch (ClassNotFoundException e){
             System.out.println("Cannot find database driver");
-        } 
+        } catch (NullPointerException npe){
+            // If we get here, then the db configuration file is missing or damaged. Log it and let the user know
+            try{
+                LogWriter.writeToLog(npe.toString() + "--It appears that the database configuration file is missing. You can add one to the project root directory to connect to the database.");
+            } catch(IOException ioe){
+                System.out.println(ioe.toString());
+            }
+            AlertBox.display("Missing Configuration Data", "It appears that the database configuration file is missing. You can add one to the project root directory to connect to the database.");
+        }
         
 
         return conn;
