@@ -16,15 +16,12 @@ public class AddressTest {
     // TODO: finish adding tests
     public AddressTest() {
     }
-
- 
-
     /**
      * Test of getAddressID method, of class Address.
      */
     @Test
-    public void testGetAddressID() {
-        System.out.println("getAddressID");
+    public void testGetAddressID1() {
+        System.out.println("Test that function returns -1 when address is not found or invalid");
         String addr1 = "";
         String addr2 = "";
         String zip = "";
@@ -34,13 +31,26 @@ public class AddressTest {
         int result = Address.getAddressID(addr1, addr2, zip, phone, cityID);
         assertEquals(expResult, result);
     }
-
+    @Test
+    public void testGetAddressID2() {
+        System.out.println("Test that function retrieves known address.");
+        int countryID = new Country().getCountryID("USA");
+        int cityID = new City().getCityID("Staten Island", countryID);
+        String addr1 = "111 new street";
+        String addr2 = "";
+        String zip = "10303";
+        String phone = "123-345-2222";
+        int expResult = 19;
+        int result = Address.getAddressID(addr1, addr2, zip, phone, cityID);
+        assertEquals(expResult, result);
+    }
+    
     /**
      * Test of exists method, of class Address.
      */
     @Test
-    public void testExists() {
-        System.out.println("exists");
+    public void testExists1() {
+        System.out.println("Tests that function returns false if given an address which is not in the database.");
         String addr1 = "";
         String addr2 = "";
         String zip = "";
@@ -50,7 +60,20 @@ public class AddressTest {
         boolean result = Address.exists(addr1, addr2, zip, phone, cityId);
         assertEquals(expResult, result);
     }
-
+    
+    @Test
+    public void testExists2() {
+        System.out.println("Tests that function returns true for existing address");
+        int countryID = new Country().getCountryID("USA");
+        int cityID = new City().getCityID("Staten Island", countryID);
+        String addr1 = "111 new street";
+        String addr2 = "";
+        String zip = "10303";
+        String phone = "123-345-2222";
+        boolean expResult = true;
+        boolean result = Address.exists(addr1, addr2, zip, phone, cityID);
+        assertEquals(expResult, result);
+    }
     /**
      * Test of addAddress method, of class Address.
      * @throws java.lang.Exception
